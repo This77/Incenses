@@ -1,0 +1,9 @@
+{% if eigenschaft_liste %}
+    <ul>
+    {% for eigenschaft in eigenschaft_liste %}
+        <li><a href="{% url 'rauch:eigenschaft_singleform' eigenschaft.id %}">{{ eigenschaft.bezeichnung }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No data found.</p>
+{% endif %}
