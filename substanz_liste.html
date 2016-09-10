@@ -1,9 +1,0 @@
-{% if substanz_liste %}
-    <ul>
-    {% for substanz in substanz_liste %}
-        <li><a href="{% url 'rauch:substanz_singleform' substanz.id %}">{{ substanz.bezeichnung }}</a> ({{ substanz.name_botanisch }})</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No data found.</p>
-{% endif %}
