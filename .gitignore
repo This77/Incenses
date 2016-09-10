@@ -46,6 +46,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# LINUX
+.directory
 
 # Created by https://www.gitignore.io/api/django,python
 
