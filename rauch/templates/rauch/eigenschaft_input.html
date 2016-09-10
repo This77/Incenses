@@ -1,0 +1,14 @@
+<h1>Eigenschaft</h1>
+<ul>
+
+<form action="{% url 'rauch:eigenschaft_input' %}" method="post">
+    {% csrf_token %}
+    {{ form_search }}
+    <input type="submit" name="search" value="Search" />
+</form>
+
+<form action="{% url 'rauch:eigenschaft_input' %}" method="post">
+    {% csrf_token %}
+    {{ form_input }}
+    <input type="submit" name="save" value="Submit" />
+</form>

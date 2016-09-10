@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import Substanz, Eigenschaft
-from .forms import SubstanzInputForm, SubstanzInputSucheForm
+from .forms import *
 
 def index(request):
     return HttpResponse("Hello This. You're at the index of Rauch.")
@@ -82,6 +82,53 @@ def substanz_singleform(request, substanz_id):
 def substanz_images(request, substanz_id):
     response = "Du schaust die Fotos der Substanz %s an."
     return HttpResponse(response %str(substanz_id))
+
+def eigenschaft_input(request):
+    #template = loader.get_template('rauch/substanz_input.html')
+    #context = {'substanz_input': substanz_input,}
+    #return HttpResponse(template.render(context, request))
+
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # We save the data
+        if 'save' in request.POST:
+            # create a form instance and populate it with data from the request:
+            form_input = EigenschaftInputForm(request.POST)
+            # Wanna sniff?
+            #print request.META
+            # check whether it's valid:
+            if form_input.is_valid():
+                try:
+                    bezeichnung = form_input.cleaned_data['bezeichnung']
+                    eigenschaft = Eigenschaft.objects.get(bezeichnung=bezeichnung)
+                except Eigenschaft.DoesNotExist:
+                    # Create new object.
+                    eigenschaft = Eigenschaft()
+                # Populate object
+                for k, v in form_input.cleaned_data.iteritems():
+                        if hasattr(eigenschaft, k):
+                            setattr(eigenschaft, k, v)
+                eigenschaft.save()
+                # Redirect to substanz_singleform
+                return redirect('rauch:eigenschaft_singleform', eigenschaft_id=eigenschaft.id)
+            else:
+                # Data invalid
+                return HttpResponseRedirect('/input_invalid/')
+        elif 'search' in request.POST:
+            e = Eigenschaft.objects.get(id=1)
+            # create a form instance and populate it with data from the request:
+            form_search = EigenschaftInputSucheForm(initial={'bezeichnung':e.bezeichnung})
+            form_input = EigenschaftInputForm(instance=e)
+            return render(request, 'rauch/eigenschaft_input.html', {'form_input': form_input, 'form_search':form_search})
+        else:
+            # Request invalid
+            return HttpResponseRedirect('/request_invalid/')
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        # Show native
+        form_input = EigenschaftInputForm()
+        form_search = EigenschaftInputSucheForm()
+        return render(request, 'rauch/eigenschaft_input.html', {'form_input': form_input, 'form_search':form_search})
 
 def eigenschaft_liste(request):
     eigenschaft_liste = Eigenschaft.objects.order_by('bezeichnung')

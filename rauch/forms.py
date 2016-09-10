@@ -1,5 +1,5 @@
 from django import forms
-from .models import Substanz
+from .models import *
 
 class SubstanzInputForm(forms.ModelForm):
     class Meta:
@@ -16,4 +16,15 @@ class SubstanzInputForm(forms.ModelForm):
     """
 
 class SubstanzInputSucheForm(forms.Form):
+    bezeichnung = forms.CharField(label='Bezeichnung', max_length=256)
+
+class EigenschaftInputForm(forms.ModelForm):
+    class Meta:
+        model = Eigenschaft
+        fields = '__all__' #('bezeichnung',)
+    """
+    bezeichnung = forms.CharField(label='Bezeichnung', max_length=256)
+    """
+
+class EigenschaftInputSucheForm(forms.Form):
     bezeichnung = forms.CharField(label='Bezeichnung', max_length=256)
